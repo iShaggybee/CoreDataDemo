@@ -51,15 +51,13 @@ class StoreManager {
     }
     
     func editTask(_ task: Task, newTitle: String, handler: () -> Void) {
-        let prevTitle = task.title
-        
         task.title = newTitle
         
         do {
             try context.save()
             handler()
         } catch let error {
-            task.title = prevTitle
+            context.rollback()
             
             print("Failed to create data", error)
         }
